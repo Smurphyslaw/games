@@ -164,14 +164,26 @@ document.getElementById("tf-no").textContent=`Box Nº ${String(Math.max(1,day(20
   const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
   const geo=id=>({type:"FeatureCollection",features:feats.filter(f=>f.properties.r===id)});
   // Rare Earth: a printed desk globe
-  const re=document.getElementById("re-art"),proj=d3.geoOrthographic().scale(92).translate([106,106]).rotate([-15,-22]).clipAngle(90),path=d3.geoPath(proj);
-  const defs=el("defs",{}),dp=el("pattern",{id:"dots",width:7,height:7,patternUnits:"userSpaceOnUse"});dp.append(el("circle",{cx:3.5,cy:3.5,r:1.3,fill:"#2154A3"}));defs.append(dp);re.append(defs);
-  re.append(el("path",{d:"M22 142A92 92 0 0 1 100 14",fill:"none",stroke:"#EDE5D3","stroke-opacity":".35","stroke-width":3}));
-  re.append(el("circle",{cx:114,cy:114,r:92,fill:"#060E22"}),el("circle",{cx:106,cy:106,r:92,fill:"#17407F"}),el("circle",{cx:106,cy:106,r:92,fill:"url(#dots)"}));
-  re.append(el("path",{d:path(d3.geoGraticule10()),fill:"none",stroke:"rgba(237,229,211,.14)","stroke-width":.7}));
+  const re=document.getElementById("re-art"),C=[110,96],R=70,T=23.5;
+  const proj=d3.geoOrthographic().scale(R).translate(C).rotate([-30,-18,-T]).clipAngle(90),path=d3.geoPath(proj);
+  const defs=el("defs",{}),dp=el("pattern",{id:"dots",width:6,height:6,patternUnits:"userSpaceOnUse"});dp.append(el("circle",{cx:3,cy:3,r:1.15,fill:"#2A5FB0"}));defs.append(dp);re.append(defs);
+  const CR="#EDE5D3",INK="#0D1933";
+  // stand and base
+  re.append(el("path",{d:"M104 178h12l5 18h-22z",fill:CR,stroke:INK,"stroke-width":1.5,"stroke-linejoin":"round"}));
+  re.append(el("ellipse",{cx:110,cy:200,rx:46,ry:10,fill:CR,stroke:INK,"stroke-width":1.5}));
+  re.append(el("path",{d:"M68 200a42 7 0 0 0 84 0",fill:"none",stroke:INK,"stroke-width":1,"stroke-opacity":".35"}));
+  // the globe
+  re.append(el("circle",{cx:C[0],cy:C[1],r:R,fill:"#17407F"}),el("circle",{cx:C[0],cy:C[1],r:R,fill:"url(#dots)"}));
+  re.append(el("path",{d:path(d3.geoGraticule10()),fill:"none",stroke:"rgba(237,229,211,.16)","stroke-width":.6}));
   const gold=new Set(["mongolia","chad","kazakhstan","mali","niger"]);
-  feats.forEach(f=>{const d=path(f);if(d)re.append(el("path",{d,fill:gold.has(f.properties.r)?"#F5B700":"#EDE5D3",stroke:"#0D1933","stroke-width":.6}))});
-  re.append(el("circle",{cx:106,cy:106,r:92,fill:"none",stroke:"#EDE5D3","stroke-width":3}));
+  feats.forEach(f=>{const d=path(f);if(d)re.append(el("path",{d,fill:gold.has(f.properties.r)?"#F5B700":CR,stroke:INK,"stroke-width":.5}))});
+  re.append(el("circle",{cx:C[0],cy:C[1],r:R,fill:"none",stroke:INK,"stroke-width":1.5}));
+  // full meridian ring and axis pins, tilted with the earth
+  const ring=el("g",{transform:`rotate(${T} ${C[0]} ${C[1]})`});
+  ring.append(el("circle",{cx:C[0],cy:C[1],r:R+8,fill:"none",stroke:INK,"stroke-width":7}),el("circle",{cx:C[0],cy:C[1],r:R+8,fill:"none",stroke:"#F5B700","stroke-width":4.5}));
+  for(let i=-90;i<=90;i+=10){const y=C[1]+(R+8)*Math.sin(i*Math.PI/180),x=C[0]+(R+8)*Math.cos(i*Math.PI/180);ring.append(el("path",{d:`M${x} ${y}L${C[0]+(R+10)*Math.cos(i*Math.PI/180)} ${C[1]+(R+10)*Math.sin(i*Math.PI/180)}`,stroke:INK,"stroke-width":.8}))}
+  ring.append(el("circle",{cx:C[0],cy:C[1]-R-8,r:4,fill:CR,stroke:INK,"stroke-width":1.4}),el("circle",{cx:C[0],cy:C[1]+R+8,r:4,fill:CR,stroke:INK,"stroke-width":1.4}));
+  re.append(ring);
   // Tight Fit: Italy's cut line with two true-size stickers on it
   const ea=(id,s)=>{const c=d3.geoCentroid(geo(id));return d3.geoPath(d3.geoAzimuthalEqualArea().rotate([-c[0],-c[1]]).scale(s).translate([0,0]))};
   const box=document.getElementById("tf-contents"),S=780,it=ea("italy",S),ib=it.bounds(geo("italy"));
