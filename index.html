@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SMURPHYSLAW · daily games</title>
+<meta name="description" content="Small daily geography games by SMURPHYSLAW. Rare Earth, Tight Fit, and more on the way.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Big+Shoulders+Stencil+Display:wght@900&family=Special+Elite&display=swap">
+<style>
+/* Layout: a calm, paper-white front door with one big card per game. The hub stays quiet so each game's own art
+   (Rare Earth's printed globe, Tight Fit's cardboard) carries the color. */
+:root{
+  color-scheme:light;
+  --paper:#F3EFE6; --card:#FBF9F4; --ink:#17130E; --muted:#6C655B; --line:#DCD4C6; --accent:#C0281F;
+  --navy:#0D1933; --globe:#17407F; --cream:#EDE5D3; --kraft:#C9A06A;
+  --wide:"Archivo","Arial Narrow",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--wide);min-height:100vh;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-block:18px 56px;display:flex;flex-direction:column;gap:28px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* top bar */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1.5px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:34px;height:34px}
+.brand b{font-stretch:125%;font-weight:900;font-size:22px;letter-spacing:.04em}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{text-decoration:none;font-weight:600;font-size:15px;padding:7px 12px;border-radius:999px}
+.nav a:hover{background:#E8E2D6}
+
+/* intro */
+.intro h1{margin:0;font-stretch:125%;font-weight:900;font-size:clamp(38px,7vw,68px);line-height:.98;letter-spacing:-.02em;max-width:16ch;text-wrap:balance}
+.intro p{margin:14px 0 0;font-size:18px;color:var(--muted);max-width:52ch}
+.intro p em{font-style:normal;color:var(--ink)}
+
+/* game cards */
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.game{position:relative;border-radius:22px;overflow:hidden;min-height:380px;display:grid;grid-template-rows:1fr auto;text-decoration:none;
+  box-shadow:0 1px 0 rgba(0,0,0,.04);transition:transform .18s ease,box-shadow .18s ease;isolation:isolate}
+.game:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(23,19,14,.55)}
+.game .art{position:relative;min-height:220px;display:grid;place-items:center}
+.game .art svg{width:min(70%,260px);height:auto}
+.game .copy{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px}
+.game .kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.game h2{margin:0;font-size:34px;line-height:1}
+.game p{margin:0;font-size:16px;max-width:40ch}
+.play{align-self:flex-start;margin-top:8px;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:16px;padding:12px 20px;border-radius:999px}
+.play svg{width:16px;height:16px}
+
+.re{background:var(--navy);color:var(--cream)}
+.re h2{font-stretch:125%;font-weight:900;letter-spacing:-.01em}
+.re .play{background:var(--cream);color:var(--navy)}
+.re .kicker{color:#F5B700;opacity:1}
+
+.tf{background:var(--kraft) url(tight-fit/cardboard.jpg) 0 0/300px;color:#24170A}
+.tf h2{font-family:"Big Shoulders Stencil Display",Impact,sans-serif;font-weight:900;font-size:44px;letter-spacing:.04em}
+.tf .copy{background:rgba(251,246,234,.92);border-top:3px solid #24170A}
+.tf p{font-family:"Special Elite","Courier New",monospace;font-size:15px}
+.tf .play{background:#C0281F;color:#FBF6EA;border:2.5px solid #24170A;box-shadow:3px 4px 0 rgba(36,23,10,.35);font-family:"Big Shoulders Stencil Display",Impact,sans-serif;font-size:22px;letter-spacing:.08em;padding:9px 18px 7px}
+.tf .kicker{font-family:"Special Elite",monospace;color:#7A5A2E;opacity:1}
+
+.soon{background:#E7E1D5;color:var(--muted);grid-column:1/-1;min-height:0;grid-template-rows:auto;grid-template-columns:minmax(0,220px) minmax(0,1fr);align-items:center;cursor:default}
+.soon:hover{transform:none;box-shadow:none}
+.soon .art{min-height:170px}
+.soon .art svg{width:min(80%,170px)}
+.soon h2{color:var(--ink);font-stretch:112%;font-weight:800;font-size:28px}
+.tag{display:inline-block;align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:4px 10px;border-radius:999px}
+
+/* about */
+.about{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;border-top:1.5px solid var(--line);padding-top:26px}
+.about h3{margin:0 0 6px;font-stretch:112%;font-weight:800;font-size:18px}
+.about p{margin:0;color:var(--muted);font-size:15px}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted);border-top:1.5px solid var(--line);padding-top:18px}
+
+@media (max-width:760px){
+  .games{grid-template-columns:1fr}
+  .soon{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr}
+  .game{min-height:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="brand" href="./" aria-label="SMURPHYSLAW home">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="2" width="30" height="30" rx="8" fill="#17130E"/><path d="M10 22c1.8 2 4.2 3 7 3 3.6 0 6-1.8 6-4.6 0-6-11.4-3.4-11.4-9 0-2.6 2.3-4.4 5.6-4.4 2.4 0 4.4.8 5.8 2.4" fill="none" stroke="#F3EFE6" stroke-width="3" stroke-linecap="round"/><circle cx="25.5" cy="25.5" r="2.4" fill="#C0281F"/></svg>
+      <b>SMURPHYSLAW</b>
+    </a>
+    <nav class="nav" aria-label="Games"><a href="../rare-earth/">Rare Earth</a><a href="tight-fit/">Tight Fit</a></nav>
+  </header>
+
+  <section class="intro">
+    <h1>Small daily games about a big, weird planet.</h1>
+    <p>A new puzzle in each game every day, the same for everyone. Play in a minute, argue about it all day. <em>Anything that can go wrong, will.</em></p>
+  </section>
+
+  <section class="games" aria-label="Games">
+    <a class="game re" href="../rare-earth/">
+      <div class="art" aria-hidden="true">
+        <svg id="re-art" viewBox="0 0 220 220"></svg>
+      </div>
+      <div class="copy">
+        <span class="kicker" id="re-no">No. 1 today</span>
+        <h2>Rare Earth</h2>
+        <p>Name a country that fits. The fewer people who think of it, the more it's worth.</p>
+        <span class="play">Play today's puzzle <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </a>
+
+    <a class="game tf" href="tight-fit/">
+      <div class="art" aria-hidden="true">
+        <svg id="tf-art" viewBox="0 0 240 200"><defs><pattern id="cbp" width="120" height="120" patternUnits="userSpaceOnUse"><image href="tight-fit/cardboard.jpg" width="120" height="120"/></pattern></defs><g transform="translate(20 30)"><rect width="200" height="150" fill="#C9A06A"/><rect width="200" height="150" fill="url(#cbp)"/><path d="M0 0H200L182 18H18Z" fill="rgba(255,246,226,.32)"/><path d="M0 150H200L182 132H18Z" fill="rgba(40,22,6,.45)"/><path d="M0 0L18 18V132L0 150Z" fill="rgba(40,22,6,.14)"/><path d="M200 0L182 18V132L200 150Z" fill="rgba(40,22,6,.3)"/><rect x="1.5" y="1.5" width="197" height="147" fill="none" stroke="#24170A" stroke-width="3"/><g id="tf-contents"></g></g>
+          <g transform="translate(168 6)"><circle cx="30" cy="30" r="29" fill="#CFDDE6" stroke="#24170A" stroke-width="3"/><path d="M16 26c0-15 28-15 28 0z" fill="#C0281F" stroke="#24170A" stroke-width="2"/><path d="M12 26q18-5 36 0l1 4q-19-4-38 0z" fill="#8E1C15" stroke="#24170A" stroke-width="1.6"/><path d="M18 30c0 12 6 20 12 20s12-8 12-20" fill="#E2B08A" stroke="#24170A" stroke-width="2"/><path d="M21 40c3-4 7-4 9-2 2-2 6-2 9 2-3 2-6 2-9 0-3 2-6 2-9 0z" fill="#4A2E16"/><circle cx="25" cy="33" r="1.5" fill="#24170A"/><path d="M33 33h5" stroke="#24170A" stroke-width="1.6"/></g>
+        </svg>
+      </div>
+      <div class="copy">
+        <span class="kicker" id="tf-no">Box Nº 001 today</span>
+        <h2>TIGHT FIT</h2>
+        <p>Pack true-size countries into today's box. Pat the Packer already did. Beat Pat.</p>
+        <span class="play">Open today's box</span>
+      </div>
+    </a>
+
+    <div class="game soon" aria-label="Beeline, coming soon">
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 170 170"><circle cx="85" cy="85" r="70" fill="#D7CFC0" stroke="#17130E" stroke-width="3"/><path d="M28 112Q85 20 146 62" fill="none" stroke="#C0281F" stroke-width="4" stroke-dasharray="2 8" stroke-linecap="round"/><circle cx="28" cy="112" r="7" fill="#17130E"/><circle cx="146" cy="62" r="7" fill="#17130E"/></svg>
+      </div>
+      <div class="copy">
+        <span class="tag">Coming soon</span>
+        <h2>Beeline</h2>
+        <p>Three countries. One straight line across the globe. Straight lines on a round planet never go where you expect.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div><h3>New every day</h3><p>Every game resets at midnight, your time. Miss a day? The archive keeps old puzzles playable.</p></div>
+    <div><h3>No accounts, no fuss</h3><p>Your streaks and stats live in your browser. Just open a game and play.</p></div>
+    <div><h3>Share the damage</h3><p>Every game ends with a little result to paste into your group chat. Bragging is encouraged.</p></div>
+  </section>
+
+  <footer class="foot"><span>© SMURPHYSLAW · Made for people who argue about maps.</span><span>Shoutout to Nern, Milla and Murph.</span></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+// today's puzzle numbers, matching each game's own calendar
+const now=new Date(),day=(y,m,d)=>Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(y,m,d))/864e5)+1;
+document.getElementById("re-no").textContent=`No. ${Math.max(1,day(2026,10,23))} today`;
+document.getElementById("tf-no").textContent=`Box Nº ${String(Math.max(1,day(2026,10,25))).padStart(3,"0")} today`;
+
+// card art drawn from the same map data the games use
+(async()=>{try{
+  const topo=await (await fetch("world.json")).json(),feats=topojson.feature(topo,topo.objects.countries).features,NS="http://www.w3.org/2000/svg";
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  const geo=id=>({type:"FeatureCollection",features:feats.filter(f=>f.properties.r===id)});
+  // Rare Earth: a printed desk globe
+  const re=document.getElementById("re-art"),proj=d3.geoOrthographic().scale(92).translate([106,106]).rotate([-15,-22]).clipAngle(90),path=d3.geoPath(proj);
+  const defs=el("defs",{}),dp=el("pattern",{id:"dots",width:7,height:7,patternUnits:"userSpaceOnUse"});dp.append(el("circle",{cx:3.5,cy:3.5,r:1.3,fill:"#2154A3"}));defs.append(dp);re.append(defs);
+  re.append(el("path",{d:"M22 142A92 92 0 0 1 100 14",fill:"none",stroke:"#EDE5D3","stroke-opacity":".35","stroke-width":3}));
+  re.append(el("circle",{cx:114,cy:114,r:92,fill:"#060E22"}),el("circle",{cx:106,cy:106,r:92,fill:"#17407F"}),el("circle",{cx:106,cy:106,r:92,fill:"url(#dots)"}));
+  re.append(el("path",{d:path(d3.geoGraticule10()),fill:"none",stroke:"rgba(237,229,211,.14)","stroke-width":.7}));
+  const gold=new Set(["mongolia","chad","kazakhstan","mali","niger"]);
+  feats.forEach(f=>{const d=path(f);if(d)re.append(el("path",{d,fill:gold.has(f.properties.r)?"#F5B700":"#EDE5D3",stroke:"#0D1933","stroke-width":.6}))});
+  re.append(el("circle",{cx:106,cy:106,r:92,fill:"none",stroke:"#EDE5D3","stroke-width":3}));
+  // Tight Fit: Italy's cut line with two true-size stickers on it
+  const ea=(id,s)=>{const c=d3.geoCentroid(geo(id));return d3.geoPath(d3.geoAzimuthalEqualArea().rotate([-c[0],-c[1]]).scale(s).translate([0,0]))};
+  const box=document.getElementById("tf-contents"),S=780,it=ea("italy",S),ib=it.bounds(geo("italy"));
+  const g=el("g",{transform:`translate(${100-(ib[0][0]+ib[1][0])/2} ${75-(ib[0][1]+ib[1][1])/2})`});
+  g.append(el("path",{d:it(geo("italy")),fill:"#F3E7CF",stroke:"#C0281F","stroke-width":1.6,"stroke-dasharray":"5 3"}));box.append(g);
+  [["denmark","#1F8A80",[66,50],-18],["belgium","#E5A823",[136,104],12]].forEach(([id,col,[x,y],a])=>{const p=ea(id,S),b=p.bounds(geo(id)),cx=(b[0][0]+b[1][0])/2,cy=(b[0][1]+b[1][1])/2,d=p(geo(id));
+    const s=el("g",{transform:`translate(${x} ${y}) rotate(${a}) translate(${-cx} ${-cy})`});
+    s.append(el("path",{d,fill:"rgba(20,12,4,.3)",transform:"translate(2 3)"}),el("path",{d,fill:"#FBF6EA",stroke:"#FBF6EA","stroke-width":4,"stroke-linejoin":"round"}),el("path",{d,fill:col,stroke:"#24170A","stroke-width":1}));box.append(s);});
+}catch(e){}})();
+</script>
+</body>
+</html>
