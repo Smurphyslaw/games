@@ -43,11 +43,11 @@ body{background:var(--bench);color:var(--ink);font:400 15.5px/1.5 var(--body);mi
 .side>.label{order:1}.stage{order:2}.side>.controls{order:3}.side>.hint{order:4}.side>.note{order:5}.side>.foot{order:6}
 #svg{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}
 @media (min-width:880px){
-  .wrap{max-width:1480px;display:grid;grid-template-columns:minmax(300px,340px) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:26px;row-gap:14px;padding-block:12px 24px}
+  .wrap{max-width:none;display:grid;grid-template-columns:clamp(280px,20vw,400px) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:26px;row-gap:14px;padding-block:12px 24px}
   .bar{grid-column:1/-1}
   .side{display:flex;flex-direction:column;gap:16px;grid-column:1;grid-row:2;min-width:0}
   .wrap>.stage{grid-column:2;grid-row:2;position:sticky;top:12px;align-self:start}
-  #svg{max-height:calc(100vh - 96px);max-height:calc(100dvh - 96px)}
+  #svg{max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px);margin-inline:auto}
   .controls{grid-template-columns:1fr 1fr}.controls .go{grid-column:1/-1}
 }
 button{font:inherit;color:inherit}
@@ -132,6 +132,7 @@ button{font:inherit;color:inherit}
 .opening .stamp3{opacity:0;transition:opacity .16s linear,transform 0s .2s}
 .opening .fprint{opacity:0;transition:opacity .16s linear}
 .opening .flap3,.opening .flap3.r{transition-delay:.2s}
+.flaps3d.opening .flap3,.flaps3d.opening .flap3.r{opacity:0;transition:transform .75s cubic-bezier(.5,0,.25,1) .2s,filter .75s .2s,opacity .3s linear .62s}
 .stamp3{position:absolute;left:50%;top:50%;font-family:var(--stencil);font-weight:900;font-size:calc(var(--u,8px)*10);letter-spacing:.08em;color:#C0281F;border:calc(var(--u,8px)*.9) solid #C0281F;padding:calc(var(--u,8px)*.5) calc(var(--u,8px)*3) 0;white-space:nowrap;opacity:0;
   transform:translate(-50%,-50%) rotate(-12deg) scale(1.8);transition:opacity .12s 1.45s,transform .35s cubic-bezier(.2,1.6,.4,1) 1.45s;mix-blend-mode:multiply}
 .stamp3.long{font-size:calc(var(--u,8px)*6.6)}
@@ -236,6 +237,51 @@ dialog#help::backdrop{background:rgba(36,23,10,.6)}
   .controls .btn{font-size:19px;padding:10px 8px 8px}
   .side>.controls{position:sticky;bottom:0;z-index:5;background:#FFFDF7;border-top:2px solid var(--ink);margin-inline:-14px;padding:10px 14px max(12px,env(safe-area-inset-bottom))}
 }
+/* ---- fit the window ---- */
+@media (min-width:880px){
+  .wrap:not(.on-home){height:100vh;height:100dvh;grid-template-rows:auto minmax(0,1fr);padding-block:10px 16px}
+  .wrap:not(.on-home) .side{overflow-y:auto;min-height:0;padding:4px 10px 10px 4px;margin:-4px -10px 0 -4px}
+  .wrap:not(.on-home)>.stage{position:relative;top:0;height:100%;min-height:0}
+  .wrap:not(.on-home) #svg{width:100%;height:100%;max-height:none}
+}
+@media (max-width:879px){
+  .bar{padding-bottom:10px}.mark-text b{font-size:30px}.mark svg{width:36px;height:36px}.icon-btn{width:40px;height:40px}
+  .wrap:not(.on-home):not(.done){height:100vh;height:100dvh;padding-block:8px 0;gap:8px;overflow:hidden}
+  .wrap:not(.on-home):not(.done)>.stage{flex:1 1 0;min-height:0}
+  .wrap:not(.on-home):not(.done) #svg{width:100%;height:100%;max-height:none}
+  .wrap:not(.on-home):not(.done) .side>.hint,.wrap:not(.on-home):not(.done) .side>.foot{display:none}
+  .wrap:not(.on-home):not(.done) .side>.controls{position:static;margin-inline:-14px}
+  .wrap:not(.on-home):not(.done) .label{transform:none}
+  .wrap:not(.on-home):not(.done) .label::before,.wrap:not(.on-home):not(.done) .label::after{display:none}
+  .wrap:not(.on-home):not(.done) .lab-top{padding:3px 12px;font-size:14px}
+  .wrap:not(.on-home):not(.done) .lab-body{padding:6px 12px 8px;gap:2px 12px}
+  .wrap:not(.on-home):not(.done) .dest small{display:none}
+  .wrap:not(.on-home):not(.done) .dest h1{font-size:30px}
+  .wrap:not(.on-home):not(.done) .gauge{margin-top:2px}
+  .wrap:not(.on-home):not(.done) .pct{font-size:36px}
+  .wrap:not(.on-home):not(.done) .under{margin-top:0;font-size:12px}
+  .wrap:not(.on-home):not(.done) .patline{margin-top:4px;padding-top:5px;font-size:12.5px;line-height:1.3}
+  .wrap:not(.on-home):not(.done) .patline .pat{width:32px;height:32px}
+}
+@media (min-width:1600px) and (min-height:860px){.wrap:not(.on-home) .side{zoom:1.2}}
+@media (min-width:2100px) and (min-height:1100px){.wrap:not(.on-home) .side{zoom:1.4}}
+@media (min-width:880px){.dest h1{font-size:clamp(30px,3vw,58px);overflow-wrap:normal;word-break:normal;hyphens:none}}
+@media (min-width:880px) and (max-height:800px){
+  .wrap:not(.on-home) .label::before,.wrap:not(.on-home) .label::after{display:none}
+  .wrap:not(.on-home) .lab-top{padding:3px 12px;font-size:14px}
+  .wrap:not(.on-home) .lab-body{padding:6px 12px 8px;gap:2px 12px}
+  .wrap:not(.on-home) .dest small{display:none}
+  .wrap:not(.on-home) .pct{font-size:40px}
+  .wrap:not(.on-home) .patline{margin-top:4px;padding-top:5px;font-size:13px;line-height:1.3}
+  .wrap:not(.on-home) .patline .pat{width:34px;height:34px}
+  .wrap:not(.on-home) .side{gap:10px}
+  .wrap:not(.on-home) .side>.foot{display:none}
+  .wrap:not(.on-home) .controls .btn{font-size:19px;padding:8px 10px 6px}
+}
+/* home grows with big screens */
+@media (min-width:1500px){.on-home .home{zoom:1.15}}
+@media (min-width:1800px){.on-home .home{zoom:1.3}}
+@media (min-width:2200px){.on-home .home{zoom:1.5}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -384,7 +430,7 @@ function makePuzzle(seed,targetId){
 const dailyPuzzle=n=>makePuzzle(n*7919+13,ORDER[(n-1)%ORDER.length]);
 
 /* ---------- drawing ---------- */
-const NS="http://www.w3.org/2000/svg",svg=$("svg"),W=1000,BH=780,WALL=74,FL=92;
+const NS="http://www.w3.org/2000/svg",svg=$("svg"),W=1000,BH=780,WALL=74,FL=14;
 const MQ=matchMedia("(min-width:880px)"),inBoxXY=p=>p.x>0&&p.x<W&&p.y>0&&p.y<BH;
 // lay the pieces out on the mat and size the mat to fit them all
 function shelfPack(ps,x0,x1,y0){const shelves=[];let y=y0;
@@ -394,15 +440,15 @@ function shelfPack(ps,x0,x1,y0){const shelves=[];let y=y0;
   return y-40;}
 function layoutTray(ps,side){const maxW=Math.ceil(Math.max(...ps.map(p=>p.w)));
   if(!side){const M={x:-FL,y:BH+FL+34,w:W+2*FL,h:0};M.h=Math.ceil(shelfPack(ps,M.x+40,M.x+M.w-40,M.y+74)+56-M.y);return M;}
-  const top=-FL,limit=BH+2*FL;let w=Math.max(420,maxW+80),bottom;
-  for(;w<1100;w+=20){bottom=shelfPack(ps,0,w-80,top+74);if(bottom+56-top<=limit)break;}
-  const M={x:W+FL+44,y:top,w,h:0};bottom=shelfPack(ps,M.x+40,M.x+w-40,top+74);M.h=Math.max(limit,Math.ceil(bottom+56-top));return M;}
+  const top=-FL,limit=BH+2*FL,sideW=Math.min(400,Math.max(280,innerWidth*.2)),sw=Math.max(300,innerWidth-28-sideW-26),sh=Math.max(300,innerHeight-110);let best=null,bottom;
+  for(let w=Math.max(420,maxW+80);w<=1400;w+=20){bottom=shelfPack(ps,0,w-80,top+74);const mh=Math.max(limit,bottom+56-top),sc=Math.min(sw/(W+2*FL+56+w),sh/(mh+12));if(!best||sc>best.sc+1e-4)best={w,sc};}
+  const w=best.w,M={x:W+FL+44,y:top,w,h:0};bottom=shelfPack(ps,M.x+40,M.x+w-40,top+74);M.h=Math.max(limit,Math.ceil(bottom+56-top));return M;}
 const vbFor=(M,side)=>side?{x:-FL-6,y:-FL-6,w:M.x+M.w+FL+12,h:Math.max(BH+2*FL,M.h)+12}:{x:-FL-6,y:-FL-6,w:W+2*FL+12,h:M.y+M.h+FL+12};
 const el=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e};
 const txt=(attrs,s)=>{const t=el("text",attrs);t.textContent=s;return t};
 const COLORS=["--p1","--p4","--p2","--p3","--p5","--p6","--p7","--p8","--p9"];
 let G=null;
-function setup(puz,mode,box,saved){
+function setup(puz,mode,box,saved){document.querySelector(".wrap").classList.remove("done");
   const T=puz.target,unit=pathFor(T,1).b,tw=unit[1][0]-unit[0][0],th=unit[1][1]-unit[0][1];
   const scale=Math.min((W-2*WALL-110)/tw,(BH-2*WALL-120)/th);
   const tp=pathFor(T,scale),tb=tp.b,tx=W/2-(tb[0][0]+tb[1][0])/2,ty=BH/2-(tb[0][1]+tb[1][1])/2;
@@ -416,6 +462,8 @@ function setup(puz,mode,box,saved){
 // switching between wide and narrow moves the mat; pieces still on the mat follow it, packed ones stay put
 MQ.addEventListener("change",()=>{if(!G)return;const side=MQ.matches;if(side===G.side)return;const M=layoutTray(G.pieces,side);
   G.pieces.forEach(p=>{if(!inBoxXY(p)){p.x=p.hx;p.y=p.hy;}});Object.assign(G,{mat:M,vb:vbFor(M,side),side});draw();});
+let rzT=0;addEventListener("resize",()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(!G||!G.side||!MQ.matches||drag||G.locked)return;
+  const M=layoutTray(G.pieces,true);G.pieces.forEach(p=>{if(!inBoxXY(p)){p.x=p.hx;p.y=p.hy;}});Object.assign(G,{mat:M,vb:vbFor(M,true)});draw();},250);});
 function defs(){
   const d=el("defs",{});
   const pat=(id,w,h,kids,extra={})=>{const p=el("pattern",Object.assign({id,width:w,height:h,patternUnits:"userSpaceOnUse"},extra));kids.forEach(k=>p.append(k));d.append(p);};
@@ -437,13 +485,8 @@ function defs(){
   svg.append(d);
 }
 function draw(){
-  svg.setAttribute("viewBox",`${G.vb.x} ${G.vb.y} ${G.vb.w} ${G.vb.h}`);svg.replaceChildren();defs();
+  svg.setAttribute("viewBox",`${G.vb.x} ${G.vb.y} ${G.vb.w} ${G.vb.h}`);svg.setAttribute("preserveAspectRatio","xMidYMin meet");svg.replaceChildren();defs();
   const F=WALL;
-  // the four flaps, folded open flat around the box
-  const oflaps=el("g",{class:"oflaps"});
-  [[`M0 0H${W}L${W+FL} ${-FL}H${-FL}Z`,"rgba(255,246,226,.24)"],[`M0 ${BH}H${W}L${W+FL} ${BH+FL}H${-FL}Z`,"rgba(40,22,6,.14)"],[`M0 0L${-FL} ${-FL}V${BH+FL}L0 ${BH}Z`,"rgba(255,246,226,.1)"],[`M${W} 0L${W+FL} ${-FL}V${BH+FL}L${W} ${BH}Z`,"rgba(40,22,6,.22)"]]
-    .forEach(([d,tint])=>oflaps.append(el("path",{d,fill:"url(#cb)"}),el("path",{d,fill:tint,stroke:"#24170A","stroke-width":3,"stroke-linejoin":"round"})));
-  svg.append(oflaps);
   svg.append(el("rect",{x:0,y:0,width:W,height:BH,fill:"#C9A06A"}),el("rect",{x:0,y:0,width:W,height:BH,fill:"url(#cb)"}));
   const wTop=`M0 0H${W}L${W-F} ${F}H${F}Z`,wBot=`M0 ${BH}H${W}L${W-F} ${BH-F}H${F}Z`,wL=`M0 0L${F} ${F}V${BH-F}L0 ${BH}Z`,wR=`M${W} 0L${W-F} ${F}V${BH-F}L${W} ${BH}Z`;
   svg.append(el("path",{d:wTop,fill:"url(#wTop)"}),el("path",{d:wBot,fill:"url(#wBot)"}),el("path",{d:wL,fill:"url(#wLeft)"}),el("path",{d:wR,fill:"url(#wRight)"}));
@@ -656,7 +699,7 @@ function labelFor(){
 }
 
 /* ---------- pack it ---------- */
-function lock(){G.locked=true;svg.classList.add("locked");$("controls").hidden=true;$("hint").hidden=true;}
+function lock(){G.locked=true;document.querySelector(".wrap").classList.add("done");svg.classList.add("locked");$("controls").hidden=true;$("hint").hidden=true;}
 // the flaps sit over the box part of the drawing, wherever the drawing has been scaled to
 function placeFlaps(){const f=$("flaps3d"),st=document.querySelector(".stage").getBoundingClientRect(),m=svg.getScreenCTM();if(!m)return;
   const a=new DOMPoint(0,0).matrixTransform(m),b=new DOMPoint(W,BH).matrixTransform(m);
@@ -667,7 +710,7 @@ function packAnimation(word){return new Promise(res=>{const f=$("flaps3d");$("st
   if(innerWidth<880)document.querySelector(".stage").scrollIntoView({behavior:"smooth",block:"center"});
   setTimeout(()=>{sfx.pack();const st=document.querySelector(".stage");setTimeout(()=>{st.classList.add("shake");setTimeout(()=>st.classList.remove("shake"),320)},1580);placeFlaps();f.classList.add("on");requestAnimationFrame(()=>requestAnimationFrame(()=>f.classList.add("shut")));},250);
   setTimeout(()=>{f.classList.add("opening");f.classList.remove("shut");},3100);
-  setTimeout(()=>{f.classList.remove("on","opening");svg.classList.remove("packing");res();},4150);});}
+  setTimeout(()=>{f.classList.remove("on","opening");svg.classList.remove("packing");res();},4300);});}
 function animateTo(list){ // slide pieces to new spots
   const from=G.pieces.map(p=>({x:p.x,y:p.y,a:p.a})),to=G.pieces.map((p,i)=>list[i]);const t0=performance.now(),dur=reduceMotion?1:900;
   return new Promise(res=>{const step=t=>{const k=Math.min(1,(t-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
